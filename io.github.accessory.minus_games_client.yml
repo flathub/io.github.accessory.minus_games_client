@@ -409,6 +409,7 @@ modules:
         "CARGO_HOME": "/run/build/minus_games_client/cargo"
     build-commands:
       - sed -i /Terminal=true/d other/assets/client/io.github.accessory.minus_games_client.desktop
+      - sed -i s/<component type="console-application">/<component type="desktop-application">/ other/assets/client/io.github.accessory.minus_games_client.metainfo.xml
       - cargo --offline fetch --manifest-path Cargo.toml
       - cargo --offline build --release --bin minus_games_client
       - install -Dm755 target/release/minus_games_client /app/bin/minus_games_client
