@@ -2,7 +2,7 @@ id: io.github.accessory.minus_games_client
 runtime: org.freedesktop.Platform
 runtime-version: &runtime-version "23.08"
 sdk: org.freedesktop.Sdk
-command: run.py
+command: run.sh
 separate-locales: false
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -97,8 +97,6 @@ finish-args:
   - --socket=fallback-x11
   - --socket=pulseaudio
   - --share=network
-  # - --talk-name=org.freedesktop.Notifications
-  # - --talk-name=org.kde.StatusNotifierWatcher
   # Required for bwrap to work
   - --talk-name=org.freedesktop.portal.Background
   # --- Steam ---
@@ -106,14 +104,6 @@ finish-args:
   # See https://github.com/flathub/com.valvesoftware.Steam/commit/0538256facdb0837c33232bc65a9195a8a5bc750
   - --env=XDG_DATA_DIRS=/app/share:/usr/lib/extensions/vulkan/share:/usr/share:/usr/share/runtime/share:/run/host/user-share:/run/host/share:/usr/lib/pressure-vessel/overrides/share
   
-  # - --env=WINEPREFIX=$XDG_DATA_HOME/wine/
-  # - --env=GAMEID=umu-minus_games_client
-  # - --env=PROTONPATH=GE-Proton
-  # - --env=WINE_EXE=/app/bin/umu-run
-  # - --env=SERVER_URL="http://localhost:8415"
-  # - --env=CLIENT_GAMES_FOLDER="$XDG_DATA_HOME/minus_games_client/games"
-  # - --env=CLIENT_FOLDER="$XDG_DATA_HOME/minus_games_client/client"
-  # - --env=WINE_PREFIX=$XDG_DATA_HOME/minus_games_client/wine/
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
   - --filesystem=xdg-run/gamescope-0:ro
   - --filesystem=~/.var/app/com.valvesoftware.Steam:ro
@@ -397,6 +387,20 @@ modules:
             url: https://files.pythonhosted.org/packages/08/dd/49e06f09b6645156550fb9aee9cc1e59aba7efbc972d665a1bd6ae0435d4/filelock-3.15.4.tar.gz
             sha256: 2207938cbc1844345cb01a5a95524dae30f0ce089eba5b00378295a17e3e90cb
 
+  #  Kitty
+  - name: kitty
+    buildsystem: simple
+    build-commands:
+      - install -Dm0775 -t /app/bin bin/kitty
+      - mkdir -p /app/lib
+      - cp -rn lib/* /app/lib
+    sources:
+      - type: archive
+        url: https://github.com/kovidgoyal/kitty/releases/download/v0.35.2/kitty-0.35.2-x86_64.txz
+        sha256: a49bb1ecd05495178a50958960a6377db6bbbfbe647b5c5ecae9bd14ded93acc  
+        strip-components: 0
+
+    # Minus Games Client
   - name: minus_games_client
     buildsystem: simple
     build-options:
@@ -404,7 +408,7 @@ modules:
       env:
         "CARGO_HOME": "/run/build/minus_games_client/cargo"
     build-commands:
-      - sed -i '/Terminal=true/d' other/assets/client/io.github.accessory.minus_games_client.desktop
+      - sed -i /Terminal=true/d other/assets/client/io.github.accessory.minus_games_client.desktop
       - cargo --offline fetch --manifest-path Cargo.toml
       - cargo --offline build --release --bin minus_games_client
       - install -Dm755 target/release/minus_games_client /app/bin/minus_games_client
@@ -415,59 +419,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/Accessory/minus_games/
-        commit: 8cc5552abfc3e7957dfc60399b938d85b8b663f2
+        commit: 914b0a5f60bdcccfabfc6b4c53969fdb51e9102f
       - generated-sources.json
-
-  #  Kitty
-  - name: kitty
-    buildsystem: simple
-    build-commands:
-      - install -Dm0775 -t /app/bin bin/kitty
-      - mkdir -p /app/lib
-      - cp -r lib/* /app/lib
-    sources:
-      - type: archive
-        url: https://github.com/kovidgoyal/kitty/releases/download/v0.35.2/kitty-0.35.2-x86_64.txz
-        sha256: a49bb1ecd05495178a50958960a6377db6bbbfbe647b5c5ecae9bd14ded93acc  
-        strip-components: 0
-
-  - name: ca-certificates
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/etc/ssl/certs
-      - cp /etc/ssl/certs/ca-certificates.crt /app/etc/ssl/certs/
-    sources:
-      - type: archive
-        url: https://deb.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_20240203.tar.xz
-        sha256: 3286d3fc42c4d11b7086711a85f865b44065ce05cf1fb5376b2abed07622a9c6
- 
-  # Minus Games Client
-  - name: run_in_script
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 run_in_script.sh /app/bin/run_in_script.sh
-    sources:
-      - type: script
-        dest-filename: run_in_script.sh
-        commands:
-          - set -x
-          # - exec /app/bin/umu-run "$XDG_DATA_HOME/minus_games_client/games/Final Fantasy VI/FINAL FANTASY VI.exe"
-          # - exec /app/bin/minus_games_client menu
-          # - exit $?
-          - export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-          - export TERM="xterm" 
-          - export WINEPREFIX=$XDG_DATA_HOME/wine/
-          - export GAMEID=umu-minus_games_client
-          - export PROTONPATH=GE-Proton
-          - export WINE_EXE=/app/bin/umu-run
-          - export SERVER_URL="http://localhost:8415"
-          - export CLIENT_GAMES_FOLDER="$XDG_DATA_HOME/minus_games_client/games"
-          - export CLIENT_FOLDER="$XDG_DATA_HOME/minus_games_client/client"
-          - export WINE_PREFIX=$XDG_DATA_HOME/minus_games_client/wine/
-          - exec gamemoderun /app/bin/umu-run "$XDG_DATA_HOME/minus_games_client/games/Final Fantasy VI/FINAL FANTASY VI.exe"
-          # - exec /app/bin/minus_games_client menu
-          - exit $?
-
 
   - name: run
     buildsystem: simple
@@ -477,5 +430,20 @@ modules:
       - type: script
         dest-filename: run.sh
         commands:
-          - export TERM="xterm" 
-          - exec /app/bin/kitty run_in_script.sh &
+          - export WINEPREFIX=$XDG_DATA_HOME/wine/
+          - export GAMEID=umu-minus_games_client
+          - export PROTONPATH=GE-Proton
+          - export WINE_EXE=/app/bin/umu-run
+          - export SERVER_URL="http://localhost:8415"
+          - export CLIENT_GAMES_FOLDER="$XDG_DATA_HOME/minus_games_client/games"
+          - export CLIENT_FOLDER="$XDG_DATA_HOME/minus_games_client/client"
+          - export WINE_PREFIX=$XDG_DATA_HOME/minus_games_client/wine/
+          - if [ -f $XDG_CACHE_HOME/minus_games_client/run_in_term.sh ]; then
+          -   echo "Delete $XDG_CACHE_HOME/minus_games_client/run_in_term.sh"
+          -   rm $XDG_CACHE_HOME/minus_games_client/run_in_term.sh
+          - fi
+          - /app/bin/kitty /app/bin/minus_games_client select-game-to-play || read -p "Error - Press enter to exit"
+          - if [ -f $XDG_CACHE_HOME/minus_games_client/run_in_term.sh ]; then
+          -   echo "Run $XDG_CACHE_HOME/minus_games_client/run_in_term.sh"
+          -   $XDG_CACHE_HOME/minus_games_client/run_in_term.sh
+          - fi
