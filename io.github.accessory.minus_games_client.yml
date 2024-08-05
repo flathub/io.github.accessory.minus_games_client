@@ -67,18 +67,18 @@ finish-args:
   - --allow=bluetooth
   - --allow=per-app-dev-shm
   - --env=PATH=/app/bin:/app/utils/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
-  - --filesystem=xdg-data/lutris:rw
-  - --filesystem=xdg-data/Steam:rw
-  - --filesystem=xdg-data/applications:rw
-  - --filesystem=~/.steam:rw
-  - --filesystem=~/Games:rw
+  # - --filesystem=xdg-data/lutris:rw
+  # - --filesystem=xdg-data/Steam:rw
+  # - --filesystem=xdg-data/applications:rw
+  # - --filesystem=~/.steam:rw
+  # - --filesystem=~/Games:rw
   - --filesystem=~/.local/share/Steam:rw
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
   - --filesystem=~/.var/app/org.openwinecomponents.umu.umu-launcher:rw
   - --filesystem=home
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-download
+  # - --filesystem=xdg-documents
+  # - --filesystem=xdg-desktop
+  # - --filesystem=xdg-download
   - --env=DBUS_FATAL_WARNINGS=0
   - --env=XDG_CONFIG_DIRS=/etc/xdg:/usr/lib/x86_64-linux-gnu/GL:/usr/lib/i386-linux-gnu/GL
   # Wine uses UDisks2 to enumerate disk drives
@@ -98,7 +98,7 @@ finish-args:
   - --socket=pulseaudio
   - --share=network
   # Required for bwrap to work
-  - --talk-name=org.freedesktop.portal.Background
+  # - --talk-name=org.freedesktop.portal.Background
   # --- Steam ---
   # Pressure Vessel
   # See https://github.com/flathub/com.valvesoftware.Steam/commit/0538256facdb0837c33232bc65a9195a8a5bc750
@@ -106,7 +106,7 @@ finish-args:
   
   - --env=LD_LIBRARY_PATH=/usr/lib/extensions/vulkan/gamescope/lib
   - --filesystem=xdg-run/gamescope-0:ro
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:ro
+  # - --filesystem=~/.var/app/com.valvesoftware.Steam:ro
   - --env=PATH=/app/bin:/usr/bin:/app/utils/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/app/jre/bin/:/usr/lib/extensions/vulkan/gamescope/bin
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 
