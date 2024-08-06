@@ -408,19 +408,16 @@ modules:
       env:
         "CARGO_HOME": "/run/build/minus_games_client/cargo"
     build-commands:
-      - sed -i /Terminal=true/d other/assets/client/io.github.accessory.minus_games_client.desktop
-      - sed -i 's/<component type="console-application">/<component type="desktop-application">/' other/assets/client/io.github.accessory.minus_games_client.metainfo.xml
       - cargo --offline fetch --manifest-path Cargo.toml
       - cargo --offline build --release --bin minus_games_client
       - install -Dm755 target/release/minus_games_client /app/bin/minus_games_client
-      - install -Dm644 other/assets/client/io.github.accessory.minus_games_client.svg /app/share/icons/hicolor/scalable/apps/io.github.accessory.minus_games_client.svg
-      - install -Dm644 other/assets/client/io.github.accessory.minus_games_client.desktop /app/share/applications/io.github.accessory.minus_games_client.desktop
-      - install -Dm644 other/assets/client/io.github.accessory.minus_games_client.metainfo.xml /app/share/metainfo/io.github.accessory.minus_games_client.metainfo.xml
-
+      - install -Dm644 other/assets/client/common/io.github.accessory.minus_games_client.svg /app/share/icons/hicolor/scalable/apps/io.github.accessory.minus_games_client.svg
+      - install -Dm644 other/assets/client/desktop/io.github.accessory.minus_games_client.desktop /app/share/applications/io.github.accessory.minus_games_client.desktop
+      - install -Dm644 other/assets/client/desktop/io.github.accessory.minus_games_client.metainfo.xml /app/share/metainfo/io.github.accessory.minus_games_client.metainfo.xml
     sources:
       - type: git
         url: https://github.com/Accessory/minus_games/
-        commit: 914b0a5f60bdcccfabfc6b4c53969fdb51e9102f
+        commit: 2094d2dd5f635ee668eb4b2461d7d9ea32362e7f
       - generated-sources.json
 
   - name: run
@@ -446,5 +443,5 @@ modules:
           - /app/bin/kitty /app/bin/minus_games_client select-game-to-play || read -p "Error - Press enter to exit"
           - if [ -f $XDG_CACHE_HOME/minus_games_client/run_in_term.sh ]; then
           -   echo "Run $XDG_CACHE_HOME/minus_games_client/run_in_term.sh"
-          -   $XDG_CACHE_HOME/minus_games_client/run_in_term.sh
+          -   exec $XDG_CACHE_HOME/minus_games_client/run_in_term.sh
           - fi
