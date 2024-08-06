@@ -137,7 +137,6 @@ modules:
           stable-only: true
           url-template: https://github.com/FeralInteractive/gamemode/releases/download/$version/gamemode-$version.tar.xz
 
-  # Umu Launcher
   - name: platform-bootstrap
     buildsystem: simple
     build-commands:
@@ -145,6 +144,7 @@ modules:
         set -e
         mkdir -p /app/bin
         mkdir -p /app/lib/dri/intel-vaapi-driver
+        mkdir -p /app/lib/i386-linux-gnu/GL
         install -Dm644 -t /app/etc ld.so.conf
         mkdir -p /app/lib/ffmpeg
         mkdir -p /app/share/steam/compatibilitytools.d
@@ -161,6 +161,7 @@ modules:
           include /run/flatpak/ld.so.conf.d/app-*-org.freedesktop.Platform.GL32.*.conf
           /app/lib32
           /app/lib/i386-linux-gnu
+          
   # These are needed for window management inside gamescope
   - name: python-flit-core # needed by idna
     buildsystem: simple
