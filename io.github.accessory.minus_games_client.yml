@@ -269,7 +269,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Open-Wine-Components/umu-launcher.git
-        branch: main
+        commit: babc7214d9bc5007eb6c0d59a720dea59fa694ac
     modules:
       # --- packaging ---
       - name: packaging
