@@ -80,6 +80,7 @@ finish-args:
   # - --filesystem=xdg-data/applications:rw
   # - --filesystem=~/.steam:rw
   # - --filesystem=~/Games:rw
+  #   Needed for proton to work
   - --filesystem=~/.local/share/Steam:rw
   # - --filesystem=~/.var/app/com.valvesoftware.Steam:rw
   - --filesystem=~/.var/app/org.openwinecomponents.umu.umu-launcher:rw
@@ -109,7 +110,7 @@ finish-args:
   # should fix steamdeck controler navigation
   - --filesystem=/run/udev:ro
   # should fix discord rich presence
-  - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  # - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --persist=.
   - --share=ipc
   - --socket=wayland
