@@ -79,9 +79,6 @@ finish-args:
   - --filesystem=~/.local/share/Steam:rw
   - --filesystem=~/.var/app/org.openwinecomponents.umu.umu-launcher:rw
   - --filesystem=home
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-desktop
-  - --filesystem=xdg-download
   - --env=DBUS_FATAL_WARNINGS=0
   - --env=XDG_CONFIG_DIRS=/etc/xdg:/usr/lib/x86_64-linux-gnu/GL:/usr/lib/i386-linux-gnu/GL
   # Wine uses UDisks2 to enumerate disk drives
