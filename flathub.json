@@ -1,3 +1,5 @@
 {
-  "only-arches": ["x86_64"]
+  "only-arches": ["x86_64"],
+  "end-of-life": "The console client flatpak will no longer be kept up to date. It is recommended to switch to io.github.accessory.minus_games_gui.",
+  "end-of-life-rebase": "io.github.accessory.minus_games_gui"
 }
